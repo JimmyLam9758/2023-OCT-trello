@@ -9,7 +9,7 @@ from models.card import Card, cards_schema, card_schema
 
 cards_bp = Blueprint('cards', __name__, url_prefix='/cards')
 
-# http://localhost:8080/cards
+# http://localhost:8080/cards - GET
 @cards_bp.route('/')
 def get_all_cards():
     stmt = db.select(Card).order_by(Card.date.desc())
@@ -17,7 +17,7 @@ def get_all_cards():
     return cards_schema.dump(cards)
 
 
-# http://localhost:8080/cards/4
+# http://localhost:8080/cards/4 - GET
 @cards_bp.route('/<int:card_id>')
 def get_one_card(card_id): # card_id = 4
     stmt = db.select(Card).filter_by(id=card_id) # select * from cards where id=4
@@ -26,6 +26,7 @@ def get_one_card(card_id): # card_id = 4
         return card_schema.dump(card)
     else:
         return {"error": f"Card with id {card_id} not found"}, 404
+    
 
 # http://localhost:8080/cards - POST
 @cards_bp.route('/', methods=["POST"])
@@ -47,10 +48,10 @@ def create_card():
     # return the newly created card
     return card_schema.dump(card), 201
 
-# https://localhost:8080/cards/6
+# https://localhost:8080/cards/6 - DELETE
 @cards_bp.route('/<int:card_id>', methods=["DELETE"])
 def delete_card(card_id):
-    # get the card from the database with id = card id
+    # get the card from the db with id = card_id
     stmt = db.select(Card).where(Card.id == card_id)
     card = db.session.scalar(stmt)
     # if card exists
@@ -58,8 +59,8 @@ def delete_card(card_id):
         # delete the card from the session and commit
         db.session.delete(card)
         db.session.commit()
-        # return
-        return {'message': f"Card {card.title} deleted successfully"}
+        # return msg
+        return {'message': f"Card '{card.title}' deleted successfully"}
     # else
     else:
         # return error msg

@@ -1,9 +1,11 @@
 from datetime import date
 
 from flask import Blueprint
+
 from init import db, bcrypt
 from models.user import User
 from models.card import Card
+from models.comment import Comment
 
 db_commands = Blueprint('db', __name__)
 
@@ -38,7 +40,7 @@ def seed_tables():
         Card(
             title="Card 1",
             description="Card 1 desc",
-            date=date.today(), 
+            date=date.today(),
             status="To Do",
             priority="High",
             user=users[0]
@@ -47,7 +49,7 @@ def seed_tables():
             title="Card 2",
             description="Card 2 desc",
             date=date.today(),
-            status="To Do",
+            status="Ongoing",
             priority="High",
             user=users[0]
         ),
@@ -55,7 +57,7 @@ def seed_tables():
             title="Card 3",
             description="Card 3 desc",
             date=date.today(),
-            status="On going",
+            status="Ongoing",
             priority="Medium",
             user=users[1]
         ),
@@ -70,6 +72,31 @@ def seed_tables():
     ]
 
     db.session.add_all(cards)
+
+    comments = [
+        Comment(
+            message="Comment 1",
+            user=users[0],
+            card=cards[0]
+        ),
+        Comment(
+            message="Comment 2",
+            user=users[0],
+            card=cards[2]
+        ),
+        Comment(
+            message="Comment 3",
+            user=users[1],
+            card=cards[3]
+        ),
+        Comment(
+            message="Comment 4",
+            user=users[1],
+            card=cards[2]
+        )
+    ]
+
+    db.session.add_all(comments)
 
     db.session.commit()
 

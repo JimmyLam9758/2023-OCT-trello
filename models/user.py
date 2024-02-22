@@ -14,9 +14,9 @@ class User(db.Model):
 
     comments = db.relationship('Comment', back_populates='user', cascade='all, delete')
 
-    #  {id: 1, name: User1, email: user1@email.com}
-    #  {
-    #   id: 1, 
+    # {id: 1, name: User 1, email: user1@email.com}
+    # {
+    #   id: 1,
     #   name: User 1,
     #   email: user1@email.com,
     #   cards: [
@@ -24,11 +24,12 @@ class User(db.Model):
     #       {id: 3, title: Card 3},
     #       {id: 7, title: Card 7}
     #   ]
-    #   }
+    # }
+
 
 class UserSchema(ma.Schema):
 
-    cards = fields.List(fields.Nested('CardSchema', exclude =['user']))
+    cards = fields.List(fields.Nested('CardSchema', exclude=['user']))
 
     comments = fields.List(fields.Nested('CommentSchema', exclude=['user']))
 
@@ -36,4 +37,4 @@ class UserSchema(ma.Schema):
         fields = ('id', 'name', 'email', 'password', 'is_admin', 'cards', 'comments')
 
 user_schema = UserSchema(exclude=['password']) # {}
-users_schema = UserSchema(many=True, exclude=['password']) #[{}, {}, {}]
+users_schema = UserSchema(many=True, exclude=['password']) # [{}, {}, {}]

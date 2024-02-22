@@ -46,3 +46,7 @@ class CommentSchema(ma.Schema):
 
     class Meta:
         fields = ('id', 'message', 'user', 'card')
+
+
+comment_schema = CommentSchema()
+comments_schema = CommentSchema(many=True)
