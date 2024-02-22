@@ -15,6 +15,7 @@ def auth_register():
     try:
         # the data that we get in body of the request
         body_data = request.get_json()
+
         # create the user instance
         user = User(
             name=body_data.get('name'),
@@ -30,11 +31,10 @@ def auth_register():
         # add and commit the user to DB
         db.session.add(user)
         db.session.commit()
-        # Respond back to the client
+        # Repond back to the client
         return user_schema.dump(user), 201
 
     except IntegrityError as err:
-        print(err.orig.pgcode)
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
             return {"error": f"The {err.orig.diag.column_name} is required"}
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
