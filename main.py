@@ -19,9 +19,13 @@ def create_app():
     bcrypt.init_app(app)
     jwt.init_app(app)
 
-    @app.errorhandler(ValidationError)
-    def validation_error(err):
-        return {"error": err.messages}, 400
+    @app.errorhandler(400)
+    def bad_request(err):
+        return {"error": str(err)}, 400
+    
+    @app.errorhandler(404)
+    def not_found (err):
+        return {"error": str(err)}, 404
 
     from controllers.cli_controller import db_commands
     app.register_blueprint(db_commands)
